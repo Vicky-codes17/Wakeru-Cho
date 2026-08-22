@@ -1,6 +1,6 @@
 .page-shell {
   min-height: 100vh;
-  background: #f3f1ef;
+  background: #dfe1df;
   padding: 1rem;
 }
 
@@ -17,6 +17,11 @@
   box-shadow: 0 10px 24px rgba(17, 17, 17, 0.04);
 }
 
+button,
+input {
+  font: inherit;
+}
+
 .brand-wrap {
   display: flex;
   align-items: center;
@@ -25,7 +30,7 @@
 }
 
 .brand-logo {
-  width: 2.35rem;
+  width: 1.35rem;
   height: 2.35rem;
   object-fit: contain;
   flex-shrink: 0;
