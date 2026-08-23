@@ -641,3 +641,793 @@ input {
     grid-template-columns: 1fr;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   ATM — Add Transaction Modal  (compact, no-scroll)
+   ═══════════════════════════════════════════════════════ */
+
+.atm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 14, 14, 0.48);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 300;
+  animation: atm-fade 0.16s ease;
+}
+
+@keyframes atm-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.atm-card {
+  width: min(100%, 520px);
+  background: #ffffff;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(10, 10, 10, 0.28), 0 0 0 1px rgba(0,0,0,0.06);
+  animation: atm-up 0.24s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+/* ── Discard confirmation overlay ── */
+.atm-discard-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 400;
+  /* subtle darkening on top of the already-blurred backdrop */
+  background: rgba(10, 10, 10, 0.35);
+  animation: atm-fade 0.14s ease;
+}
+
+.atm-discard-box {
+  width: min(100%, 360px);
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 1.6rem 1.5rem 1.4rem;
+  box-shadow: 0 24px 56px rgba(10, 10, 10, 0.24);
+  animation: atm-up 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.atm-discard-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: #fff8e8;
+  display: grid;
+  place-items: center;
+  color: #c9860a;
+  margin-bottom: 0.25rem;
+  flex-shrink: 0;
+}
+
+.atm-discard-icon svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.atm-discard-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #161514;
+}
+
+.atm-discard-body {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #7a7672;
+  line-height: 1.5;
+}
+
+.atm-discard-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.atm-discard-btn-keep {
+  flex: 1;
+  border: 1.5px solid #e0dbd5;
+  background: #f3efe9;
+  color: #3d3a38;
+  padding: 0.68rem 1rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.atm-discard-btn-keep:hover { background: #ebe4dc; }
+
+.atm-discard-btn-discard {
+  flex: 1;
+  border: none;
+  background: #111111;
+  color: #ffffff;
+  padding: 0.68rem 1rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.atm-discard-btn-discard:hover { opacity: 0.82; }
+
+.atm-card--success {
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.atm-card--success h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: -0.04em;
+  color: #161514;
+}
+
+.atm-card--success p {
+  margin: 0;
+  color: #7a7672;
+  font-size: 0.9rem;
+}
+
+.atm-success-ring {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6de9ac, #3dd68c);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  animation: atm-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.atm-success-ring svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@keyframes atm-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes atm-up {
+  from { transform: translateY(24px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+/* ── Top bar ── */
+.atm-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.1rem 0;
+}
+
+.atm-type-pills {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  background: #f0ece8;
+  border-radius: 999px;
+}
+
+.atm-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b6560;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.atm-pill--expense {
+  background: #111111;
+  color: #fff;
+}
+
+.atm-pill--income {
+  background: #1a7a4a;
+  color: #fff;
+}
+
+.atm-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.atm-pill-dot--expense { background: #ff7272; }
+.atm-pill-dot--income  { background: #5de8a6; }
+
+.atm-pill--expense .atm-pill-dot--expense { background: rgba(255,255,255,0.5); }
+.atm-pill--income  .atm-pill-dot--income  { background: rgba(255,255,255,0.5); }
+
+.atm-close {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: #f3efe9;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #4a4643;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.atm-close svg { width: 0.9rem; height: 0.9rem; }
+
+.atm-close:hover { background: #ebe4dc; }
+
+/* ── Amount hero ── */
+.atm-amount-hero {
+  padding: 1rem 1.4rem 1.1rem;
+  margin: 0.7rem 1.1rem 0;
+  border-radius: 18px;
+  transition: background 0.25s;
+}
+
+.atm-amount-hero--expense {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.atm-amount-hero--income {
+  background: linear-gradient(135deg, #0d3d24 0%, #16603b 100%);
+}
+
+.atm-amount-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.5rem;
+}
+
+.atm-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.atm-amount-sign {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  line-height: 1;
+  margin-right: 0.1rem;
+}
+
+.atm-amount-symbol {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.65);
+  line-height: 1;
+  align-self: flex-end;
+  padding-bottom: 0.18rem;
+}
+
+.atm-amount-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  width: 100%;
+  outline: none;
+  caret-color: rgba(255,255,255,0.7);
+}
+
+.atm-amount-input::placeholder {
+  color: rgba(255,255,255,0.2);
+}
+
+/* hide number arrows */
+.atm-amount-input::-webkit-outer-spin-button,
+.atm-amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.atm-amount-input[type=number] { -moz-appearance: textfield; }
+
+.atm-inline-err {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ff8080;
+}
+
+/* ── Fields section ── */
+.atm-fields {
+  padding: 0.8rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.atm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 0.85rem;
+}
+
+.atm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+}
+
+.atm-field--full {
+  grid-column: 1 / -1;
+}
+
+.atm-field--err .atm-select {
+  border-color: #e05252;
+}
+
+.atm-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5a5653;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.atm-optional {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: #9a9490;
+}
+
+.atm-select {
+  border: 1.5px solid #e8e2dc;
+  background: #faf7f5;
+  border-radius: 10px;
+  padding: 0.62rem 0.85rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: #181715;
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a5350' stroke-width='2'%3E%3Cpath d='m7 10 5 5 5-5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 0.9rem;
+  padding-right: 2.2rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+
+.atm-select[type="date"] {
+  background-image: none;
+  padding-right: 0.85rem;
+}
+
+.atm-select:focus {
+  outline: none;
+  border-color: #b0a99e;
+  box-shadow: 0 0 0 3px rgba(17,17,17,0.07);
+  background-color: #fff;
+}
+
+/* ── Payment method chips ── */
+.atm-method-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.atm-method-pill {
+  border: 1.5px solid #e5dfd9;
+  background: #faf7f5;
+  border-radius: 999px;
+  padding: 0.34rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5a5653;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.atm-method-pill--active {
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+.atm-method-pill:hover:not(.atm-method-pill--active) {
+  background: #f0ebe5;
+}
+
+.atm-ferr {
+  font-size: 0.74rem;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.atm-submit-err {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  background: #fff0f0;
+  border: 1px solid #fac5c5;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  color: #c0392b;
+}
+
+/* ── Actions ── */
+.atm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.atm-btn-cancel {
+  border: 1.5px solid #e0dbd5;
+  background: #f3efe9;
+  color: #3d3a38;
+  padding: 0.68rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.atm-btn-cancel:hover:not(:disabled) { background: #ebe4dc; }
+.atm-btn-cancel:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.atm-btn-save {
+  border: none;
+  background: #111111;
+  color: #fff;
+  padding: 0.68rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8rem;
+  transition: opacity 0.15s;
+}
+
+.atm-btn-save:hover:not(:disabled) { opacity: 0.84; }
+.atm-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@keyframes atm-spin { to { transform: rotate(360deg); } }
+
+.atm-spinner {
+  display: inline-block;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: atm-spin 0.6s linear infinite;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .atm-amount-input { font-size: 2.2rem; }
+  .atm-grid { grid-template-columns: 1fr; }
+  .atm-actions { flex-direction: column-reverse; }
+  .atm-btn-cancel, .atm-btn-save { width: 100%; justify-content: center; }
+  .atm-type-pills { width: 100%; }
+  .atm-pill { flex: 1; justify-content: center; }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TXP — Transactions Page
+   ═══════════════════════════════════════════════════════ */
+
+.txp-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* ── Header ── */
+.txp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.txp-title {
+  margin: 0.3rem 0 0;
+  font-size: clamp(1.8rem, 2.4vw, 2.5rem);
+  letter-spacing: -0.05em;
+  color: #191715;
+  line-height: 1.1;
+}
+
+.txp-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  background: #111111;
+  color: #ffffff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.txp-add-btn:hover { opacity: 0.84; }
+
+.txp-add-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+}
+
+/* ── Summary strip ── */
+.txp-summary {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #f8f5f3;
+  border: 1px solid #f0ece8;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.txp-stat {
+  flex: 1;
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.txp-stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8a847f;
+}
+
+.txp-stat-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.txp-stat--income  .txp-stat-value { color: #1a7a4a; }
+.txp-stat--expense .txp-stat-value { color: #181715; }
+
+.txp-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: #ede7e2;
+  flex-shrink: 0;
+}
+
+/* ── List ── */
+.txp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* ── Empty / loading ── */
+.txp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #8a847f;
+}
+
+.txp-empty-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.txp-empty-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3d3a38;
+}
+
+.txp-empty-sub {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.txp-spinner-ring {
+  width: 2rem;
+  height: 2rem;
+  border: 2.5px solid #e8e2dc;
+  border-top-color: #111111;
+  border-radius: 50%;
+  animation: atm-spin 0.7s linear infinite;
+}
+
+/* ── Date group ── */
+.txp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.txp-date-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.7rem 0 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #3d3a38;
+}
+
+.txp-date-full {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #9a9490;
+}
+
+/* ── Row ── */
+.txp-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  background: #f8f5f3;
+  border: 1px solid #f0ece8;
+  transition: background 0.14s;
+}
+
+.txp-row:hover {
+  background: #f3efeb;
+}
+
+/* ── Icon avatar ── */
+.txp-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.txp-icon--expense { background: #f5ebe8; }
+.txp-icon--income  { background: #e1f6ec; }
+
+/* ── Info ── */
+.txp-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.txp-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #181715;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txp-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.76rem;
+  color: #8a847f;
+}
+
+.txp-tag {
+  background: #ede8e3;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5a5350;
+}
+
+.txp-sep {
+  color: #c8c0b8;
+}
+
+/* ── Amount column ── */
+.txp-amount-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.txp-amount {
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.txp-amount--expense { color: #181715; }
+.txp-amount--income  { color: #1a7a4a; }
+
+.txp-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.12rem 0.55rem;
+  text-transform: capitalize;
+}
+
+.txp-badge--expense { background: #fde8e8; color: #c0392b; }
+.txp-badge--income  { background: #d7f5e4; color: #1a7a4a; }
+
+/* Mobile */
+@media (max-width: 520px) {
+  .txp-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .txp-stat-divider:last-of-type {
+    display: none;
+  }
+
+  .txp-stat:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid #ede7e2;
+  }
+
+  .txp-date-full { display: none; }
+}
+
