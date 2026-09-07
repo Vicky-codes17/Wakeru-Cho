@@ -4,6 +4,7 @@ import { AuthProvider } from './hooks/useAuth'
 import Layout from './components/layout/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import Home from './pages/Home'
 import Transactions from './pages/Transactions'
 import Categories from './pages/Categories'
@@ -17,6 +18,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
