@@ -6,7 +6,7 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
   const [company, setCompany] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [status, setStatus] = useState('active')
+  const [status, setStatus] = useState('Active')
   const [projectRate, setProjectRate] = useState('')
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
@@ -17,7 +17,7 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
       setCompany(initialData.company || '')
       setEmail(initialData.email || '')
       setPhone(initialData.phone || '')
-      setStatus(initialData.status || 'active')
+      setStatus(initialData.status || 'Active')
       setProjectRate(initialData.project_rate != null ? String(initialData.project_rate) : '')
       setNotes(initialData.notes || '')
     } else {
@@ -25,7 +25,7 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
       setCompany('')
       setEmail('')
       setPhone('')
-      setStatus('active')
+      setStatus('Active')
       setProjectRate('')
       setNotes('')
     }
@@ -126,9 +126,9 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
                 onChange={(e) => setStatus(e.target.value)}
                 className="w-full rounded-[12px] border border-[#e7e2dd] bg-[#fbfaf8] px-3 py-2.5 text-[13px] text-[#1f1d1b] outline-none transition focus:border-[#79e0b1]"
               >
-                <option value="active">Active</option>
-                <option value="prospect">Prospect</option>
-                <option value="inactive">Inactive</option>
+                <option value="Active">Active</option>
+                <option value="Prospect">Prospect</option>
+                <option value="Inactive">Inactive</option>
               </select>
             </label>
 

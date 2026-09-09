@@ -10,9 +10,9 @@ const currency = new Intl.NumberFormat('en-IN', {
 
 const statusLabels = {
   all: 'All',
-  active: 'Active',
-  prospect: 'Prospect',
-  inactive: 'Inactive',
+  Active: 'Active',
+  Prospect: 'Prospect',
+  Inactive: 'Inactive',
 }
 
 function getInitials(name = '') {
@@ -44,9 +44,9 @@ export default function Freelancing() {
     })
   }, [clients, query, tab])
 
-  const activeClients = clients.filter((client) => client.status === 'active')
-  const prospectClients = clients.filter((client) => client.status === 'prospect')
-  const inactiveClients = clients.filter((client) => client.status === 'inactive')
+  const activeClients = clients.filter((client) => client.status === 'Active')
+  const prospectClients = clients.filter((client) => client.status === 'Prospect')
+  const inactiveClients = clients.filter((client) => client.status === 'Inactive')
   const totalValue = clients.reduce((sum, client) => sum + Number(client.project_rate || 0), 0)
 
   function handleCreate() {
@@ -127,7 +127,7 @@ export default function Freelancing() {
 
         <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap gap-2 rounded-full bg-[#ece8e4] p-1 text-[12px] text-[#5f5a57]">
-            {Object.keys(statusLabels).map((key) => (
+            {['all', 'Active', 'Prospect', 'Inactive'].map((key) => (
               <button
                 key={key}
                 type="button"
@@ -191,18 +191,18 @@ export default function Freelancing() {
               <div>
                 <span
                   className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[12px] ${
-                    client.status === 'active'
+                    client.status === 'Active'
                       ? 'bg-[#e7fbf0] text-[#1e7d4d]'
-                      : client.status === 'prospect'
+                      : client.status === 'Prospect'
                         ? 'bg-[#fff4df] text-[#8a5c14]'
                         : 'bg-[#f3f0ed] text-[#6f6863]'
                   }`}
                 >
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      client.status === 'active'
+                      client.status === 'Active'
                         ? 'bg-[#79e0b1]'
-                        : client.status === 'prospect'
+                        : client.status === 'Prospect'
                           ? 'bg-[#f1c14f]'
                           : 'bg-[#bdb7b1]'
                     }`}

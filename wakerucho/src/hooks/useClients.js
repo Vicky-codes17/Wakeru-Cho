@@ -3,12 +3,15 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from './useAuth'
 
 function normalizeClientPayload(payload) {
+  const rawStatus = String(payload.status || 'Active').trim().toLowerCase()
+  const normalizedStatus = rawStatus === 'inactive' ? 'Inactive' : rawStatus === 'prospect' ? 'Prospect' : 'Active'
+
   return {
     name: payload.name?.trim() || '',
     company: payload.company?.trim() || '',
     email: payload.email?.trim() || '',
     phone: payload.phone?.trim() || '',
-    status: payload.status || 'active',
+    status: normalizedStatus,
     project_rate: payload.project_rate ? Number(payload.project_rate) : null,
     notes: payload.notes?.trim() || '',
   }
