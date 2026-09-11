@@ -10,6 +10,7 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
   const [projectRate, setProjectRate] = useState('')
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
     if (initialData) {
@@ -29,6 +30,7 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
       setProjectRate('')
       setNotes('')
     }
+    setSubmitError('')
   }, [initialData, isOpen])
 
   if (!isOpen) return null
@@ -36,6 +38,7 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
   async function submit(e) {
     e.preventDefault()
     setSaving(true)
+    setSubmitError('')
 
     try {
       await onSave(
@@ -51,8 +54,8 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
         isEdit,
       )
     } catch (err) {
+      setSubmitError(err?.message || 'Failed to save client')
       console.error(err)
-      alert('Failed to save client')
     } finally {
       setSaving(false)
     }
@@ -170,6 +173,12 @@ export default function AddClientModal({ isOpen, onClose, onSave, initialData })
               {saving ? 'Saving...' : isEdit ? 'Save changes' : 'Add client'}
             </button>
           </div>
+
+          {submitError ? (
+            <div className="mt-4 rounded-[14px] bg-[#fff1f1] px-4 py-3 text-[13px] text-[#c01f1f] ring-1 ring-[#f5d6d6]">
+              {submitError}
+            </div>
+          ) : null}
         </form>
       </div>
     </div>

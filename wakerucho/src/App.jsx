@@ -9,6 +9,8 @@ import Home from './pages/Home'
 import Transactions from './pages/Transactions'
 import Categories from './pages/Categories'
 import Freelancing from './pages/Freelancing'
+import Invoices from './pages/Invoices'
+import InvoiceDetail from './pages/InvoiceDetail'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 
@@ -26,6 +28,8 @@ function App() {
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/freelancing" element={<Freelancing />} />
+              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/invoices/:invoiceId" element={<InvoiceDetail />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/settings" element={<Settings />} />
             </Route>

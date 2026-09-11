@@ -83,6 +83,17 @@ const navItems = [
     ),
   },
   {
+    label: "Invoices",
+    path: "/invoices",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M7 3.75h8l4 4V20.25H7z" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15 3.75V8h4.25" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 12h6M9 16h6" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
     label: "Reports",
     path: "/reports",
     icon: (
@@ -105,24 +116,31 @@ export default function Layout() {
   const { user, signOut, showSignOutConfirm, setShowSignOutConfirm } =
     useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const activeItem =
-    navItems.find((item) => item.path === location.pathname)?.label ??
-    "Overview";
+    navItems.find(
+      (item) =>
+        location.pathname === item.path ||
+        (item.path !== "/" && location.pathname.startsWith(`${item.path}/`)),
+    )?.label ?? "Overview";
 
   const handleSidebarSelect = (value) => {
     const selected = navItems.find((item) => item.label === value);
     if (selected) navigate(selected.path);
+    setMobileMenuOpen(false);
   };
 
   const handleLogout = () => {
     setShowUserMenu(false);
     setShowSignOutConfirm(true);
+    setMobileMenuOpen(false);
   };
 
   const handleSettings = () => {
     setShowUserMenu(false);
     navigate("/settings");
+    setMobileMenuOpen(false);
   };
 
   const displayName =
@@ -218,18 +236,28 @@ export default function Layout() {
     },
   ];
 
-    return (
+  return (
     <>
       <header className="fixed left-0 right-0 top-6 z-50">
-        <div className="mx-auto mb-0 flex max-w-[1380px] items-center justify-between gap-4 rounded-[26px] bg-[#f5f3f1] px-4 py-3 ring-1 ring-[#ece5e0] shadow-[0_10px_24px_rgba(17,17,17,0.04)]">
+        <div className="mx-auto mb-0 flex max-w-[1380px] items-center justify-between gap-3 rounded-[26px] bg-[#f5f3f1] px-4 py-3 ring-1 ring-[#ece5e0] shadow-[0_10px_24px_rgba(17,17,17,0.04)]">
           <div className="flex min-w-0 items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ffffff] text-[#5f5b58] ring-1 ring-[#ece5e0] md:hidden"
+              aria-label="Open menu"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+              </svg>
+            </button>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#ffffff] ring-1 ring-[#ece5e0]">
               <img src="/WakeruCho-Logo.png" alt="WakeruCho" className="h-8 w-8 object-contain" />
             </div>
             <span className="text-[15px] font-semibold tracking-[-0.02em] text-[#111111]">WakeruCho</span>
           </div>
 
-          <div className="flex w-full max-w-[560px] items-center justify-center">
+          <div className="hidden w-full max-w-[560px] items-center justify-center md:flex">
             <div className="flex w-full items-center gap-2 rounded-full bg-[#f0efed] px-4 py-2.5 text-[13px] text-[#5f5b58] ring-1 ring-[#ebe5e1]">
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.8}>
                 <circle cx="11" cy="11" r="6" />
@@ -283,16 +311,18 @@ export default function Layout() {
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1380px] gap-4 pt-24 md:pt-28">
-        <Sidebar
-          items={navItems}
-          activeItem={activeItem}
-          onSelect={handleSidebarSelect}
-          onLogout={handleLogout}
-          onSettings={handleSettings}
-        />
+      <Sidebar
+        items={navItems}
+        activeItem={activeItem}
+        onSelect={handleSidebarSelect}
+        onLogout={handleLogout}
+        onSettings={handleSettings}
+        mobileOpen={mobileMenuOpen}
+        onMobileClose={() => setMobileMenuOpen(false)}
+      />
 
-        <main className="flex-1 rounded-[30px] bg-[#f1f0ee] p-4 ring-1 ring-[#ece5e0] md:p-5 ml-20">
+      <div className="mx-auto flex max-w-[1380px] gap-4 pt-24 md:pt-28">
+        <main className="flex-1 rounded-[30px] bg-[#f1f0ee] p-4 ring-1 ring-[#ece5e0] md:ml-20 md:p-5">
           <Outlet />
         </main>
       </div>

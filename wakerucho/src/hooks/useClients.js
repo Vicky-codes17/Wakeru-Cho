@@ -8,7 +8,8 @@ function normalizeClientPayload(payload) {
 
   return {
     name: payload.name?.trim() || '',
-    company: payload.company?.trim() || '',
+ ￼
+   company: payload.company?.trim() || '',
     email: payload.email?.trim() || '',
     phone: payload.phone?.trim() || '',
     status: normalizedStatus,
